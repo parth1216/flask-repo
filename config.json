@@ -14,7 +14,9 @@
     "about_text": "hiii .... i am parth form surat",
     "no_of_posts":2,
     "post_by":"Admin",
-    "login_img": "login.svg"
+    "login_img": "login.svg",
+    "admin_user": "parth",
+    "admin_pass": "1612"
 
   }
 

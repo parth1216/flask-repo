@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 
@@ -10,6 +10,7 @@ with open('config.json', 'r') as c:
     params = json.load(c)["params"]
 
 app = Flask(__name__)
+app.secret_key='super-secret-key'
 local_server = True
 app.config.update(
     MAIL_SERVER = 'smtp.gmail.com',
@@ -60,9 +61,24 @@ def post_route(post_slug):
 def about():
     return render_template('about.html', params=params)
 
-@app.route("/dashboard")
+@app.route("/dashboard", methods= ['GET', 'POST'])
 def dashboard():
-    return render_template('login.html', params=params)
+    if ('user' in session and session['user']==params['admin_user']):
+        posts = Posts.query.all()
+        return render_template('dashboard.html', params=params, posts=posts)
+    if request.method == 'POST':
+        username = request.form.get('uname')
+        userpass = request.form.get('pass')
+        if (username==params['admin_user'] and userpass==params['admin_pass']):
+            #set the session variables
+            session['user'] = username
+            posts=Posts.query.all()
+
+            return render_template('dashboard.html', params=params, posts=posts)
+
+    else:
+        return render_template('login.html', params=params)
+
 
 
 @app.route("/contact", methods = ['GET', 'POST'])
