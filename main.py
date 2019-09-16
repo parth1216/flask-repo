@@ -79,6 +79,15 @@ def dashboard():
     else:
         return render_template('login.html', params=params)
 
+@app.route("/edit/<string:sno>", methods = ['GET', 'POST'])
+def edit(sno):
+    if ('user' in session and session['user'] == params['admin_user']):
+        if request.method == 'POST':
+            box_title = request.form.get('title')
+
+
+
+
 
 
 @app.route("/contact", methods = ['GET', 'POST'])
